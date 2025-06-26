@@ -50,7 +50,19 @@ public class FXMLDocumentController implements Initializable {
     }    
 
     @FXML
-    private void loginclick(ActionEvent event) {
+    private void loginclick(ActionEvent event) throws IOException {
+        
+        Stage stage = new Stage();
+        Parent root = FXMLLoader.load(getClass().getResource("notepad.fxml"));
+        
+        Scene scene = new Scene(root);
+        
+        stage.setScene(scene);
+        stage.show();
+        
+        Window window = ((Node) event.getSource()).getScene().getWindow();
+        window.hide();
+        
     }
 
     @FXML
