@@ -20,6 +20,10 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 
 /**
  * FXML Controller class
@@ -53,10 +57,52 @@ public class SignupController implements Initializable {
 
     @FXML
     private void signupclick(ActionEvent event) {
+        
+        
+         String username = signusr.getText();
+    String email = signmail.getText();
+    String password = signpass.getText();
+
+    if(username.isEmpty() || email.isEmpty() || password.isEmpty()) {
+        supconfredgreen.setText("Please fill all fields.");
+        return;
+    }
+
+    String sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setString(1, username);
+        stmt.setString(2, email);
+        stmt.setString(3, password);
+
+        int rowsInserted = stmt.executeUpdate();
+        if(rowsInserted > 0){
+            supconfredgreen.setStyle("-fx-text-fill: green;");
+            supconfredgreen.setText("Signup successful! You can login now.");
+        }
+
+    } catch (SQLException e) {
+        supconfredgreen.setStyle("-fx-text-fill: red;");
+        if(e.getErrorCode() == 1062) { 
+            supconfredgreen.setText("Username or Email already exists.");
+        } else {
+            supconfredgreen.setText("Error: " + e.getMessage());
+        }
+    }
+        
+        
+        
+        
+        System.out.println("Clicked Signup");
+        
     }
 
     @FXML
     private void switchlogin(ActionEvent event) throws IOException {
+        
+      
         
         
         Stage stage = new Stage();
@@ -67,6 +113,7 @@ public class SignupController implements Initializable {
         stage.setScene(scene);
         stage.show();
         
+        System.out.println("Switched to Login");
         
         Window window = ((Node) event.getSource()).getScene().getWindow();
         window.hide();

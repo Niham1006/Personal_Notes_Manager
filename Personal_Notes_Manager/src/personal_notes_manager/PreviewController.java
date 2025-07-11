@@ -28,6 +28,8 @@ public class PreviewController implements Initializable {
     private Button npedit;
     @FXML
     private Button npupdate;
+    @FXML
+    private Button npdelete;
 
     /**
      * Initializes the controller class.
@@ -39,10 +41,23 @@ public class PreviewController implements Initializable {
 
     @FXML
     private void noteedit(ActionEvent event) {
+        
+        System.out.println("Clicked For Edit");
+        
     }
 
     @FXML
     private void npupdate(ActionEvent event) {
+        
+        System.out.println("Clicked For Update");
+        
+    }
+
+    @FXML
+    private void npdelete(ActionEvent event) {
+            
+        System.out.println("Clicked for Note to Delete");
+     
     }
     
 }
