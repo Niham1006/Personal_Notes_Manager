@@ -20,6 +20,10 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
@@ -52,16 +56,45 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void loginclick(ActionEvent event) throws IOException {
         
-        Stage stage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("notepad.fxml"));
-        
-        Scene scene = new Scene(root);
-        
-        stage.setScene(scene);
-        stage.show();
-        
-        Window window = ((Node) event.getSource()).getScene().getWindow();
-        window.hide();
+        String username = logusr.getText();
+    String password = logpass.getText();
+
+    if(username.isEmpty() || password.isEmpty()) {
+        supconfredgreen.setStyle("-fx-text-fill: red;");
+        supconfredgreen.setText("Please enter username and password.");
+        return;
+    }
+
+    String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setString(1, username);
+        stmt.setString(2, password);
+
+        ResultSet rs = stmt.executeQuery();
+        if(rs.next()) {
+            
+            Stage stage = new Stage();
+            Parent root = FXMLLoader.load(getClass().getResource("notepad.fxml"));
+
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+
+            Window window = ((Node) event.getSource()).getScene().getWindow();
+            window.hide();
+
+        } else {
+            supconfredgreen.setStyle("-fx-text-fill: red;");
+            supconfredgreen.setText("Invalid username or password.");
+        }
+    } catch (SQLException e) {
+        supconfredgreen.setStyle("-fx-text-fill: red;");
+        supconfredgreen.setText("Error: " + e.getMessage());
+    }
+        System.out.println("Clicked Login");
         
     }
 
@@ -75,6 +108,8 @@ public class FXMLDocumentController implements Initializable {
         
         stage.setScene(scene);
         stage.show();
+        
+        System.out.println("Switched to Signup");
         
         Window window = ((Node) event.getSource()).getScene().getWindow();
         window.hide();

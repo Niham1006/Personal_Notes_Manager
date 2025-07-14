@@ -50,6 +50,9 @@ public class NotepadController implements Initializable {
 
     @FXML
     private void addnote(ActionEvent event) {
+        
+        System.out.println("Clicked To Add note");
+        
     }
 
     @FXML
@@ -63,6 +66,8 @@ public class NotepadController implements Initializable {
         
         stage.setScene(scene);
         stage.show();
+        
+        System.out.println("Clicked For Priview");
         
         Window window = ((Node) event.getSource()).getScene().getWindow();
         window.hide();
