@@ -91,19 +91,11 @@ public class SignupController implements Initializable {
             supconfredgreen.setText("Error: " + e.getMessage());
         }
     }
-        
-        
-        
-        
         System.out.println("Clicked Signup");
-        
     }
 
     @FXML
     private void switchlogin(ActionEvent event) throws IOException {
-        
-      
-        
         
         Stage stage = new Stage();
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));

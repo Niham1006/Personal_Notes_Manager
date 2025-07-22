@@ -15,6 +15,7 @@
       <Button fx:id="npedit" layoutX="428.0" layoutY="90.0" mnemonicParsing="false" onAction="#noteedit" prefHeight="25.0" prefWidth="58.0" text="Edit" />
       <Button fx:id="npupdate" layoutX="208.0" layoutY="366.0" mnemonicParsing="false" onAction="#npupdate" prefHeight="25.0" prefWidth="85.0" text="Update" />
       <Button fx:id="npdelete" layoutX="400.0" layoutY="366.0" mnemonicParsing="false" onAction="#npdelete" prefHeight="25.0" prefWidth="85.0" text="Delete" />
+      <Button fx:id="npgoback" layoutX="25.0" layoutY="366.0" mnemonicParsing="false" onAction="#npgoback" prefHeight="25.0" prefWidth="85.0" text="Go Back" />
       <Label alignment="CENTER" layoutX="102.0" layoutY="4.0" prefHeight="39.0" prefWidth="296.0" text="Note Preview" underline="true">
          <font>
             <Font name="System Bold" size="25.0" />

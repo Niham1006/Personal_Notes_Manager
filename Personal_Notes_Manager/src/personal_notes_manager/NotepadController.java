@@ -21,6 +21,13 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 
 /**
  * FXML Controller class
@@ -45,33 +52,87 @@ public class NotepadController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        loadNotes();
     }    
 
     @FXML
     private void addnote(ActionEvent event) {
         
-        System.out.println("Clicked To Add note");
         
+        String title = npititle.getText();
+    String content = npinotes.getText();
+
+    if (title.isEmpty() || content.isEmpty()) {
+        System.out.println("Title or content is empty!");
+        return;
+    }
+
+    String sql = "INSERT INTO notes (title, content) VALUES (?, ?)";
+
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setString(1, title);
+        stmt.setString(2, content);
+
+        int rowsInserted = stmt.executeUpdate();
+
+        if (rowsInserted > 0) {
+            System.out.println("Note added successfully.");
+            npititle.clear();
+            npinotes.clear();
+            loadNotes();
+        }
+
+    } catch (SQLException e) {
+        System.out.println("Error inserting note: " + e.getMessage());
+    }  
     }
 
     @FXML
     private void previewbtn(ActionEvent event) throws IOException {
         
-        
-        Stage stage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("preview.fxml"));
-        
-        Scene scene = new Scene(root);
-        
-        stage.setScene(scene);
-        stage.show();
-        
-        System.out.println("Clicked For Priview");
-        
-        Window window = ((Node) event.getSource()).getScene().getWindow();
-        window.hide();
+         String selectedTitle = sltnote.getSelectionModel().getSelectedItem();
+
+    if (selectedTitle == null || selectedTitle.isEmpty()) {
+        System.out.println("No note selected to preview.");
+        return;
+    }
+    
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("preview.fxml"));
+    Parent root = loader.load();
+
+    PreviewController previewController = loader.getController();
+    previewController.loadNoteByTitle(selectedTitle); 
+
+    Stage stage = new Stage();
+    stage.setScene(new Scene(root));
+    stage.show();
+
+    ((Node) event.getSource()).getScene().getWindow().hide();
+
+    System.out.println("Previewing: " + selectedTitle);
         
     }
     
+    private void loadNotes() {
+    ObservableList<String> titles = FXCollections.observableArrayList();
+
+    String sql = "SELECT title FROM notes";
+
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+
+        while (rs.next()) {
+            titles.add(rs.getString("title"));
+        }
+
+        sltnote.setItems(titles);
+        notelist.setItems(titles);
+
+    } catch (SQLException e) {
+        System.out.println("Error loading note titles: " + e.getMessage());
+    }
+}    
 }
