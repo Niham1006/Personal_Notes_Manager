@@ -1,10 +1,6 @@
-Create Database
 
 CREATE DATABASE IF NOT EXISTS notepaddb;
 USE notepaddb;
-
-
-Create `users` Table
 
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -12,3 +8,17 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS notes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    content TEXT,
+    user_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+INSERT INTO users (username, email, password)
+VALUES ('Niham', 'niham@gmail.com', '1006'),
+       ('1', '1@gmail.com', '1'),
+       ('2', '2@gmail.com', '2'),
+       ('CSIT', 'CSIT@gmail.com', '1006');
