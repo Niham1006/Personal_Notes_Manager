@@ -75,7 +75,7 @@ public class SignupController implements Initializable {
 
         stmt.setString(1, username);
         stmt.setString(2, email);
-        stmt.setString(3, password);
+        stmt.setString(3, password); // Ideally hash this
 
         int rowsInserted = stmt.executeUpdate();
         if(rowsInserted > 0){
@@ -85,17 +85,25 @@ public class SignupController implements Initializable {
 
     } catch (SQLException e) {
         supconfredgreen.setStyle("-fx-text-fill: red;");
-        if(e.getErrorCode() == 1062) { 
+        if(e.getErrorCode() == 1062) { // Duplicate entry
             supconfredgreen.setText("Username or Email already exists.");
         } else {
             supconfredgreen.setText("Error: " + e.getMessage());
         }
     }
+        
+        
+        
+        
         System.out.println("Clicked Signup");
+        
     }
 
     @FXML
     private void switchlogin(ActionEvent event) throws IOException {
+        
+      
+        
         
         Stage stage = new Stage();
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));

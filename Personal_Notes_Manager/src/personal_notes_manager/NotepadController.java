@@ -27,6 +27,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Hyperlink;
 
 
 /**
@@ -45,7 +46,12 @@ public class NotepadController implements Initializable {
     @FXML
     private Button npiaddbtn;
     @FXML
+    private Button logoutBtn;
+    @FXML
     private ListView<String> notelist;
+    @FXML
+    private Hyperlink npcp;
+    
 
     /**
      * Initializes the controller class.
@@ -67,26 +73,29 @@ public class NotepadController implements Initializable {
         return;
     }
 
-    String sql = "INSERT INTO notes (title, content) VALUES (?, ?)";
+    String sql = "INSERT INTO notes (title, content, user_id) VALUES (?, ?, ?)";
+try (Connection conn = DBConnection.getConnection();
+     PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-    try (Connection conn = DBConnection.getConnection();
-         PreparedStatement stmt = conn.prepareStatement(sql)) {
+    stmt.setString(1, title);
+    stmt.setString(2, content);
+    stmt.setInt(3, Session.getUserId()); // logged-in user ID
 
-        stmt.setString(1, title);
-        stmt.setString(2, content);
+    stmt.executeUpdate();
+    System.out.println("Note saved.");
+    
+            // Reload the notes immediately after save to update the UI
+        loadNotes();
 
-        int rowsInserted = stmt.executeUpdate();
+        // Optionally, clear inputs after save
+        npititle.clear();
+        npinotes.clear();
+    
 
-        if (rowsInserted > 0) {
-            System.out.println("Note added successfully.");
-            npititle.clear();
-            npinotes.clear();
-            loadNotes();
-        }
+} catch (SQLException e) {
+    e.printStackTrace();
+}
 
-    } catch (SQLException e) {
-        System.out.println("Error inserting note: " + e.getMessage());
-    }  
     }
 
     @FXML
@@ -96,19 +105,23 @@ public class NotepadController implements Initializable {
 
     if (selectedTitle == null || selectedTitle.isEmpty()) {
         System.out.println("No note selected to preview.");
-        return;
+        return; // Do nothing or later show alert
     }
-    
+
+    // Pass the title to the preview page via FXMLLoader
     FXMLLoader loader = new FXMLLoader(getClass().getResource("preview.fxml"));
     Parent root = loader.load();
 
+    // Access the controller and pass the data
     PreviewController previewController = loader.getController();
-    previewController.loadNoteByTitle(selectedTitle); 
+    previewController.loadNoteByTitle(selectedTitle); // You’ll add this method next
 
+    // Show preview window
     Stage stage = new Stage();
     stage.setScene(new Scene(root));
     stage.show();
 
+    // Hide current window
     ((Node) event.getSource()).getScene().getWindow().hide();
 
     System.out.println("Previewing: " + selectedTitle);
@@ -116,23 +129,62 @@ public class NotepadController implements Initializable {
     }
     
     private void loadNotes() {
-    ObservableList<String> titles = FXCollections.observableArrayList();
+        System.out.println("Loading notes for user ID: " + Session.getUserId());
 
-    String sql = "SELECT title FROM notes";
+     notelist.getItems().clear();
+    sltnote.getItems().clear();
+
+    String sql = "SELECT title FROM notes WHERE user_id = ?";
 
     try (Connection conn = DBConnection.getConnection();
-         PreparedStatement stmt = conn.prepareStatement(sql);
-         ResultSet rs = stmt.executeQuery()) {
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setInt(1, Session.getUserId());
+
+        ResultSet rs = stmt.executeQuery();
 
         while (rs.next()) {
-            titles.add(rs.getString("title"));
+            String title = rs.getString("title");
+            notelist.getItems().add(title);
+            sltnote.getItems().add(title);
         }
 
-        sltnote.setItems(titles);
-        notelist.setItems(titles);
-
     } catch (SQLException e) {
-        System.out.println("Error loading note titles: " + e.getMessage());
+        System.out.println("Error loading notes: " + e.getMessage());
     }
-}    
+}
+
+   @FXML
+private void logout(ActionEvent event) throws IOException {
+    // Load login page FXML
+    Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
+    Scene scene = new Scene(root);
+
+    // Get current stage and set the new scene
+    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    stage.setScene(scene);
+    stage.show();
+
+    System.out.println("Logged out and returned to login page");
+} 
+
+    @FXML
+    private void gotocp(ActionEvent event) throws IOException {
+        
+        Stage stage = new Stage();
+        Parent root = FXMLLoader.load(getClass().getResource("changepassword.fxml"));
+        
+        Scene scene = new Scene(root);
+        
+        stage.setScene(scene);
+        stage.show();
+        
+        System.out.println("Goto to Change Password");
+        
+        Window window = ((Node) event.getSource()).getScene().getWindow();
+        window.hide();
+        
+    }
+
+    
 }
