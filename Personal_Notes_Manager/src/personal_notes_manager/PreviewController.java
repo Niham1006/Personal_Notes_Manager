@@ -74,17 +74,17 @@ public class PreviewController implements Initializable {
 
         stmt.setString(1, newTitle);
         stmt.setString(2, newContent);
-        stmt.setString(3, originalTitle); // Use original title in WHERE
+        stmt.setString(3, originalTitle); 
 
         int rows = stmt.executeUpdate();
         if (rows > 0) {
             System.out.println("Note updated successfully.");
-            originalTitle = newTitle; // Update the reference
+            originalTitle = newTitle; 
         } else {
             System.out.println("No matching note found to update.");
         }
 
-        // Lock fields again
+        
         nptitle.setEditable(false);
         npnotes.setEditable(false);
 
@@ -108,13 +108,13 @@ public class PreviewController implements Initializable {
         if (rows > 0) {
             System.out.println("Note deleted successfully.");
 
-            // Optionally go back to notepad
+            
             Stage stage = new Stage();
             Parent root = FXMLLoader.load(getClass().getResource("notepad.fxml"));
             stage.setScene(new Scene(root));
             stage.show();
 
-            // Close preview window
+            
             ((Node) event.getSource()).getScene().getWindow().hide();
         } else {
             System.out.println("No note found to delete.");
@@ -133,7 +133,7 @@ public class PreviewController implements Initializable {
         stage.setScene(new Scene(root));
         stage.show();
 
-        // Close current window
+        
         ((Node) event.getSource()).getScene().getWindow().hide();
 }
 
@@ -148,7 +148,7 @@ public class PreviewController implements Initializable {
         ResultSet rs = stmt.executeQuery();
 
         if (rs.next()) {
-            originalTitle = title; // Save the title BEFORE any edit
+            originalTitle = title; 
             nptitle.setText(title);
             npnotes.setText(rs.getString("content"));
             nptitle.setEditable(false);

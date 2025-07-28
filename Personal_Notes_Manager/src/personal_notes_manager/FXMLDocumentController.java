@@ -80,10 +80,10 @@ public class FXMLDocumentController implements Initializable {
             int userId = rs.getInt("id");
             String userNameFromDB = rs.getString("username");
 
-            // 🔐 Set Session
+          
             Session.setUser(userId, userNameFromDB);
 
-            // Redirect to Notepad
+           
             Stage stage = new Stage();
             Parent root = FXMLLoader.load(getClass().getResource("notepad.fxml"));
             Scene scene = new Scene(root);
@@ -101,9 +101,7 @@ public class FXMLDocumentController implements Initializable {
     } catch (SQLException e) {
         supconfredgreen.setStyle("-fx-text-fill: red;");
         supconfredgreen.setText("Database error: " + e.getMessage());
-    }
-        //System.out.println("Clicked Login");
-        
+    }  
     }
 
     @FXML

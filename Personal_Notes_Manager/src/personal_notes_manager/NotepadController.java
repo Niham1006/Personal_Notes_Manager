@@ -79,15 +79,15 @@ try (Connection conn = DBConnection.getConnection();
 
     stmt.setString(1, title);
     stmt.setString(2, content);
-    stmt.setInt(3, Session.getUserId()); // logged-in user ID
+    stmt.setInt(3, Session.getUserId()); 
 
     stmt.executeUpdate();
     System.out.println("Note saved.");
     
-            // Reload the notes immediately after save to update the UI
+            
         loadNotes();
 
-        // Optionally, clear inputs after save
+        
         npititle.clear();
         npinotes.clear();
     
@@ -105,23 +105,23 @@ try (Connection conn = DBConnection.getConnection();
 
     if (selectedTitle == null || selectedTitle.isEmpty()) {
         System.out.println("No note selected to preview.");
-        return; // Do nothing or later show alert
+        return; 
     }
 
-    // Pass the title to the preview page via FXMLLoader
+    
     FXMLLoader loader = new FXMLLoader(getClass().getResource("preview.fxml"));
     Parent root = loader.load();
 
-    // Access the controller and pass the data
+    
     PreviewController previewController = loader.getController();
-    previewController.loadNoteByTitle(selectedTitle); // You’ll add this method next
+    previewController.loadNoteByTitle(selectedTitle); 
 
-    // Show preview window
+    
     Stage stage = new Stage();
     stage.setScene(new Scene(root));
     stage.show();
 
-    // Hide current window
+    
     ((Node) event.getSource()).getScene().getWindow().hide();
 
     System.out.println("Previewing: " + selectedTitle);
@@ -156,11 +156,11 @@ try (Connection conn = DBConnection.getConnection();
 
    @FXML
 private void logout(ActionEvent event) throws IOException {
-    // Load login page FXML
+    
     Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
     Scene scene = new Scene(root);
 
-    // Get current stage and set the new scene
+    
     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     stage.setScene(scene);
     stage.show();

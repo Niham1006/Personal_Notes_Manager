@@ -80,13 +80,13 @@ public class ChangepasswordController implements Initializable {
             
             Connection con = DBConnection.getConnection();
 
-            // Check if email exists
+            
             PreparedStatement checkStmt = con.prepareStatement("SELECT * FROM users WHERE email = ?");
             checkStmt.setString(1, email);
             ResultSet rs = checkStmt.executeQuery();
 
             if (rs.next()) {
-                // Email found, update password
+                
                 PreparedStatement updateStmt = con.prepareStatement("UPDATE users SET password = ? WHERE email = ?");
                 updateStmt.setString(1, newPassword);
                 updateStmt.setString(2, email);

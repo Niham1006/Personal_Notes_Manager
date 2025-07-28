@@ -46,36 +46,48 @@ public class SignupController implements Initializable {
     private Label supconfredgreen;
     @FXML
     private Label supconf1;
+    @FXML
+    private javafx.scene.control.ComboBox<String> securityQuestionCombo;
+    @FXML
+    private javafx.scene.control.TextField securityAnswerField;
+
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        securityQuestionCombo.getItems().addAll(
+        "What is your pet's name?",
+        "What is your favorite color?",
+        "What city were you born in?"
+    );
     }    
 
     @FXML
-    private void signupclick(ActionEvent event) {
-        
-        
-         String username = signusr.getText();
+private void signupclick(ActionEvent event) {
+    String username = signusr.getText();
     String email = signmail.getText();
     String password = signpass.getText();
+    String selectedQuestion = securityQuestionCombo.getValue();
+    String securityAnswer = securityAnswerField.getText();
 
-    if(username.isEmpty() || email.isEmpty() || password.isEmpty()) {
+    if(username.isEmpty() || email.isEmpty() || password.isEmpty() ||
+       selectedQuestion == null || securityAnswer.isEmpty()) {
         supconfredgreen.setText("Please fill all fields.");
         return;
     }
 
-    String sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+    String sql = "INSERT INTO users (username, email, password, security_question, security_answer) VALUES (?, ?, ?, ?, ?)";
 
     try (Connection conn = DBConnection.getConnection();
          PreparedStatement stmt = conn.prepareStatement(sql)) {
 
         stmt.setString(1, username);
         stmt.setString(2, email);
-        stmt.setString(3, password); // Ideally hash this
+        stmt.setString(3, password);
+        stmt.setString(4, selectedQuestion);
+        stmt.setString(5, securityAnswer);
 
         int rowsInserted = stmt.executeUpdate();
         if(rowsInserted > 0){
@@ -85,26 +97,20 @@ public class SignupController implements Initializable {
 
     } catch (SQLException e) {
         supconfredgreen.setStyle("-fx-text-fill: red;");
-        if(e.getErrorCode() == 1062) { // Duplicate entry
+        if(e.getErrorCode() == 1062) {
             supconfredgreen.setText("Username or Email already exists.");
         } else {
             supconfredgreen.setText("Error: " + e.getMessage());
         }
     }
-        
-        
-        
-        
-        System.out.println("Clicked Signup");
-        
-    }
+
+    System.out.println("Clicked Signup");
+}
+
 
     @FXML
     private void switchlogin(ActionEvent event) throws IOException {
-        
-      
-        
-        
+
         Stage stage = new Stage();
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
         

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
@@ -10,29 +11,33 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="300.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="personal_notes_manager.SignupController">
-<children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#052040" height="300.0" layoutX="258.0" stroke="TRANSPARENT" strokeType="INSIDE" width="250.0" />
-      <Button fx:id="signup" layoutX="71.0" layoutY="242.0" mnemonicParsing="false" onAction="#signupclick" prefHeight="25.0" prefWidth="102.0" text="Signup" />
-      <Button fx:id="forlogin" layoutX="331.0" layoutY="241.0" mnemonicParsing="false" onAction="#switchlogin" prefHeight="25.0" prefWidth="102.0" text="Click For Login">
-         <font>
-            
-         </font>
-      </Button>
-      <TextField fx:id="signusr" layoutX="26.0" layoutY="62.0" prefHeight="33.0" prefWidth="196.0" promptText="Username" />
-      <TextField fx:id="signmail" layoutX="26.0" layoutY="112.0" prefHeight="33.0" prefWidth="196.0" promptText="Email" />
-      <PasswordField fx:id="signpass" layoutX="26.0" layoutY="164.0" prefHeight="33.0" prefWidth="196.0" promptText="Password" />
-      <Label fx:id="supconfredgreen" alignment="CENTER" layoutX="27.0" layoutY="208.0" prefHeight="25.0" prefWidth="196.0" textFill="RED" />
-      <Label fx:id="supconf1" alignment="CENTER" layoutX="27.0" layoutY="208.0" prefHeight="25.0" prefWidth="196.0" textFill="#00ff22" />
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="307.0" layoutY="70.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@img/NotepadLogo.png" />
-         </image>
-      </ImageView>
-      <Label alignment="CENTER" layoutX="27.0" prefHeight="51.0" prefWidth="196.0" text="Signup Page" underline="true">
+<AnchorPane id="AnchorPane" prefHeight="380.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="personal_notes_manager.SignupController">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#052040" height="380.0" layoutX="258.0" stroke="TRANSPARENT" strokeType="INSIDE" width="250.0" />
+      
+      <Label alignment="CENTER" layoutX="27.0" layoutY="10.0" prefHeight="51.0" prefWidth="196.0" text="Signup Page" underline="true">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Label>
+
+      <TextField fx:id="signusr" layoutX="26.0" layoutY="62.0" prefHeight="33.0" prefWidth="196.0" promptText="Username" />
+      <TextField fx:id="signmail" layoutX="26.0" layoutY="112.0" prefHeight="33.0" prefWidth="196.0" promptText="Email" />
+      <PasswordField fx:id="signpass" layoutX="26.0" layoutY="162.0" prefHeight="33.0" prefWidth="196.0" promptText="Password" />
+
+      <ComboBox fx:id="securityQuestionCombo" layoutX="26.0" layoutY="212.0" prefHeight="33.0" prefWidth="196.0" promptText="Choose a Question" />
+      <TextField fx:id="securityAnswerField" layoutX="26.0" layoutY="262.0" prefHeight="33.0" prefWidth="196.0" promptText="Answer" />
+
+      <Label fx:id="supconfredgreen" alignment="CENTER" layoutX="27.0" layoutY="288.0" prefHeight="25.0" prefWidth="196.0" textFill="RED" />
+      <Label fx:id="supconf1" alignment="CENTER" layoutX="27.0" layoutY="288.0" prefHeight="25.0" prefWidth="196.0" textFill="#00ff22" />
+
+      <Button fx:id="signup" layoutX="71.0" layoutY="320.0" mnemonicParsing="false" onAction="#signupclick" prefHeight="25.0" prefWidth="102.0" text="Signup" />
+      <Button fx:id="forlogin" layoutX="331.0" layoutY="320.0" mnemonicParsing="false" onAction="#switchlogin" prefHeight="25.0" prefWidth="102.0" text="Click For Login" />
+
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="307.0" layoutY="100.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@img/NotepadLogo.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
